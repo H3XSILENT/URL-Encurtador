@@ -2,8 +2,8 @@ package url
 
 import (
 	"math/rand"
-	"time"
 	"net/url"
+    "time"
 )
 
 type url struct {
@@ -31,7 +31,8 @@ func ConfigurarRepositorio(r Repositorio) {
 }
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	n := r.Intn(100)
 }
 
 func BuscarOuCriarNovaUrl(destino string) (
@@ -43,7 +44,7 @@ func BuscarOuCriarNovaUrl(destino string) (
 		return n, false, nil
 	}
 
-	if _, err = url.ParseRequestURI(destino). err != nil {
+	if _, err = url.ParseRequestURI(destino); err != nil {
 		return nil, false, err
 	}
 
@@ -60,7 +61,7 @@ func gerarID() string {
 		}
 		return string(id)
 	}
-	
+
 	for {
 		if id := novoID(); !repo.IdExiste(id) {
 			return id
