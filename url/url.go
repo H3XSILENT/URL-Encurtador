@@ -3,6 +3,7 @@ package url
 import (
 	"math/rand"
 	"time"
+	"net/url"
 )
 
 type url struct {
@@ -38,4 +39,35 @@ func BuscarOuCriarNovaUrl(destino string) (
 	nova bool,
 	err error,
 ) {
+	if u = repo.BuscarPorUrl(destino); u != nil {
+		return n, false, nil
+	}
+
+	if _, err = url.ParseRequestURI(destino). err != nil {
+		return nil, false, err
+	}
+
+	url := URL{gerarID(), time.Now(), destino}
+	repo.Salvar(url)
+	return &url, true, nil
+}
+
+func gerarID() string {
+	novoID := func() string {
+		id := make([]byte, tamanho, tamanho)
+		for i := range id {
+			id[i] = simbolos[rand.Intn(len(simbolos))]
+		}
+		return string(id)
+	}
+	
+	for {
+		if id := novoID(); !repo.IdExiste(id) {
+			return id
+		}
+	}
+}
+
+func buscar(id string) *Url {
+	return repo.BuscarPorId(id)
 }
